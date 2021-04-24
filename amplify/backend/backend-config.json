@@ -1,0 +1,12 @@
+{
+  "auth": {
+    "postagram8dfd75da": {
+      "service": "Cognito",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [],
+      "customAuth": false
+    }
+  },
+  "function": {},
+  "api": {}
+}
