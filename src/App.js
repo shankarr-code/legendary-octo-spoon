@@ -50,7 +50,8 @@ function Router() {
         "Authorization": `Bearer ${(await Auth.currentSession()).getIdToken().getJwtToken()}`,
         "X-Amz-Security-Token": user.signInUserSession.idToken.jwtToken,
         "Access-Control-Allow-Origin": "*",
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "X-Api-Key": user.attributes['custom:api_key']
       }, // OPTIONAL
       queryStringParameters: {  // OPTIONAL
         partition: 'db_nosql',
@@ -77,10 +78,11 @@ function Router() {
           "Authorization": `Bearer ${(await Auth.currentSession()).getIdToken().getJwtToken()}`,
           "X-Amz-Security-Token": user.signInUserSession.idToken.jwtToken,
           "Access-Control-Allow-Origin": "*",
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
+          "X-Api-Key": user.attributes['custom:api_key']
         },
         queryStringParameters: {
-          action: 'get_url', key_name: `${sp_key}`
+          action: 'get_url_cf', key_name: `${sp_key}`
         },
         //'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'
       };

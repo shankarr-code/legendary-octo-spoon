@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { css } from '@emotion/css'
 import Button from './Button';
 import { v4 as uuid } from 'uuid';
-import { Storage, API, Auth } from 'aws-amplify';
+import { API, Auth } from 'aws-amplify';
 import axios from 'axios';
 //import { createPost } from './graphql/mutations';
 
@@ -57,7 +57,8 @@ export default function CreatePost({
             "Authorization": `Bearer ${(await Auth.currentSession()).getIdToken().getJwtToken()}`,
             "X-Amz-Security-Token": user.signInUserSession.idToken.jwtToken,
             "Access-Control-Allow-Origin": "*",
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            "X-Api-Key": user.attributes['custom:api_key']
           },
           queryStringParameters: {
             action: 'post_url', key_name: `${formState.image.name}`, content: `${formState.image.fileInfo.type}`
@@ -98,17 +99,18 @@ export default function CreatePost({
           "Authorization": `Bearer ${(await Auth.currentSession()).getIdToken().getJwtToken()}`,
           "X-Amz-Security-Token": user.signInUserSession.idToken.jwtToken,
           "Access-Control-Allow-Origin": "*",
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
+          "X-Api-Key": user.attributes['custom:api_key']
         },
         queryStringParameters: {
           partition: 'db_nosql',
         },
         body: postInfo
       };
-      API
+      await API
         .put(apiName, pathdb, myInitdb)
         .then(response => {
-          console.log("axios -->", response);
+          console.log("API response after DDB update -->", response);
         })
         .catch(error => {
           console.log(error.response);
