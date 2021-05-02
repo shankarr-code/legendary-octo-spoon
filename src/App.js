@@ -4,9 +4,10 @@ import {
   Switch,
   Route
 } from "react-router-dom";
-import { withAuthenticator } from '@aws-amplify/ui-react';
+import { withAuthenticator, AmplifyAuthenticator, AmplifySignUp } from '@aws-amplify/ui-react';
+import { AuthState, onAuthUIStateChange } from '@aws-amplify/ui-components';
 import { css } from '@emotion/css';
-import Amplify, { API, Storage, Auth } from 'aws-amplify';
+import Amplify, { API, Auth } from 'aws-amplify';
 //import { listPosts } from './graphql/queries';
 
 import Posts from './Posts';
@@ -31,29 +32,30 @@ function Router() {
   /* create a couple of pieces of initial state */
   const [showOverlay, updateOverlayVisibility] = useState(false);
   const [posts, updatePosts] = useState([]);
-  const [user, setUser] = useState('')
+  const [user, setUser] = useState('');
+  const [authState, setAuthState] = useState();
 
   /* fetch posts when component loads */
   useEffect(() => {
-    fetchPosts();
+    fetchPosts(); 
+
   }, []);
 
   async function fetchPosts() {
     const user = await Auth.currentAuthenticatedUser();
     setUser(user);
-    const tenant = user.attributes['custom:tenant_id'];
     console.log("user --> ", user);
     const apiName = 'myendpoint';
     const path = '/object';
-    const myInit = { // OPTIONAL
+    const myInit = { 
       headers: {
         "Authorization": `Bearer ${(await Auth.currentSession()).getIdToken().getJwtToken()}`,
         "X-Amz-Security-Token": user.signInUserSession.idToken.jwtToken,
         "Access-Control-Allow-Origin": "*",
         "Content-Type": "application/json",
         "X-Api-Key": user.attributes['custom:api_key']
-      }, // OPTIONAL
-      queryStringParameters: {  // OPTIONAL
+      }, 
+      queryStringParameters: {  
         partition: 'db_nosql',
       },
       //'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'
@@ -135,7 +137,7 @@ function Router() {
         />
       )}
     </>
-  );
+  ) 
 }
 
 const dividerStyle = css`
@@ -146,4 +148,5 @@ const contentStyle = css`
   min-height: calc(100vh - 45px);
   padding: 0px 40px;
 `
+//export default Router
 export default withAuthenticator(Router, { includeGreetings: true });

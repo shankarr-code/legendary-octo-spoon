@@ -48,9 +48,9 @@ export default function CreatePost({
       if (!name || !description || !location || !image.name) return;
       updateFormState(currentState => ({ ...currentState, saving: true }));
       const postId = uuid();
-      const postInfo = { name, description, location, image: formState.image.name, imageName: user.attributes['custom:tenant_id'] + '/' + user.username + '/' + formState.image.name, id: postId, tenant_id: user.attributes['custom:tenant_id'], userid: user.username };
+      const postInfo = { name, description, location, image: formState.image.name, imageName: user.attributes['custom:tenant'] + '/' + user.username + '/' + formState.image.name, id: postId, tenant_id: user.attributes['custom:tenant'], userid: user.username };
       try {
-        // Get presigned URL
+        // Get presigned URL to upload object
         const pathurl = '/geturl';
         const myIniturl = {
           headers: {
@@ -116,7 +116,7 @@ export default function CreatePost({
           console.log(error.response);
         });
 
-      updatePosts([...posts, { ...postInfo, image: formState.file, tenant: user.attributes['custom:tenant_id'] }]);
+      updatePosts([...posts, { ...postInfo, image: formState.file, tenant: user.attributes['custom:tenant'] }]);
       updateFormState(currentState => ({ ...currentState, saving: false }));
       updateOverlayVisibility(false);
       console.log("formState --> ", formState);
