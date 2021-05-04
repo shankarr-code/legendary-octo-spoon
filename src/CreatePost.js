@@ -149,7 +149,15 @@ export default function CreatePost({
         type="file"
         onChange={onChangeFile}
       />
-      { formState.file && formState.imageName.endsWith("mp4") ? <video className={imageStyle} alt="preview" src={formState.file} /> : <img className={imageStyle} alt="ipreview" src={formState.file} />}
+      { function(){
+        if (formState.file === '' ) {
+          return null;
+        } else if (formState.image.name.endsWith("mp4")){
+          return <video className={imageStyle} alt="preview" src={formState.file} />;
+        } else {
+          return <img className={imageStyle} alt="ipreview" src={formState.file} />;
+        }
+      } ()}
       <Button title="Create New Post" onClick={save} />
       <Button type="cancel" title="Cancel" onClick={() => updateOverlayVisibility(false)} />
       { formState.saving && <p className={savingMessageStyle}>Saving post...</p>}
