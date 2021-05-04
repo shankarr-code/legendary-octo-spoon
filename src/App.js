@@ -4,8 +4,7 @@ import {
   Switch,
   Route
 } from "react-router-dom";
-import { withAuthenticator, AmplifyAuthenticator, AmplifySignUp } from '@aws-amplify/ui-react';
-import { AuthState, onAuthUIStateChange } from '@aws-amplify/ui-components';
+import { withAuthenticator} from '@aws-amplify/ui-react';
 import { css } from '@emotion/css';
 import Amplify, { API, Auth } from 'aws-amplify';
 //import { listPosts } from './graphql/queries';
@@ -33,7 +32,6 @@ function Router() {
   const [showOverlay, updateOverlayVisibility] = useState(false);
   const [posts, updatePosts] = useState([]);
   const [user, setUser] = useState('');
-  const [authState, setAuthState] = useState();
 
   /* fetch posts when component loads */
   useEffect(() => {
